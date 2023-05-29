@@ -7,6 +7,8 @@ import com.parkingtime.authentication.repositories.UserEmailVerificationReposito
 import com.parkingtime.authentication.repositories.UserRepository;
 import com.parkingtime.authentication.services.UserEmailVerificationService;
 import com.parkingtime.common.enums.RoleEnum;
+import com.parkingtime.common.exceptions.NotFoundException;
+import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,11 +16,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,6 +42,26 @@ class UserEmailVerificationServiceTests {
 
     private static final String fakeEmail = "testmailing@gmail.com";
     private static User user;
+
+    private static Object[][] testDataProvider() {
+        return new Object[][]{
+                {
+                        UserEmailVerification.builder()
+                                .user(user)
+                                .code(Randomizer.numberGenerator(6))
+                                .build(),
+                        "Wrong code"
+                },
+                {
+                        UserEmailVerification.builder()
+                                .user(user)
+                                .code(Randomizer.numberGenerator(6))
+                                .verifiedAt(LocalDateTime.now())
+                                .build(),
+                        "Already verified email"
+                }
+        };
+    }
 
     @BeforeAll
     static void beforeAll() {
@@ -80,5 +104,64 @@ class UserEmailVerificationServiceTests {
         } else {
             Assertions.assertEquals("Email is not valid", exception.getMessage());
         }
+    }
+
+
+    @Test
+    @DisplayName("verifyEmail - verify email - success")
+    void verifyEmail_verifyEmail_returnsMessageResponse() {
+        // Arrange
+        UserEmailVerification userEmailVerification = UserEmailVerification.builder()
+                .user(user)
+                .code(Randomizer.numberGenerator(6))
+                .build();
+        given(userRepository.findByEmail(anyString()))
+                .willReturn(Optional.of(user));
+        given(userEmailVerificationRepository.findUserEmailVerificationByUser(user))
+                .willReturn(Optional.of(userEmailVerification));
+        // Act
+        MessageResponse messageResponse = userEmailVerificationService
+                .verifyEmail(user.getEmail(), userEmailVerification.getCode());
+        // Assert
+        Assertions.assertAll(() -> {
+            Assertions.assertNotNull(messageResponse);
+            Assertions.assertEquals("Email is verified", messageResponse.message());
+        });
+    }
+
+    @Test
+    @DisplayName("verifyEmail - verify email - none existing email - failure")
+    void verifyEmail_verifyEmail_returnsNullPointerException() {
+        // Arrange
+        int code = 123456;
+        String email = Randomizer.alphabeticGenerator(10) + "@gmail.com";
+        given(userRepository.findByEmail(anyString()))
+                .willReturn(Optional.empty());
+        // Act
+        // Assert
+        NotFoundException exception = Assertions.assertThrows(NotFoundException.class,
+                () -> userEmailVerificationService.verifyEmail(email, code));
+        Assertions.assertEquals("User with email " + email + " is not found", exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "#{index} - Test with code = {1}")
+    @MethodSource("testDataProvider")
+    @DisplayName("verifyEmail - verify email - wrong code - failure")
+    void verifyEmail_verifyEmailWithInvalidData_returnsIllegalArgumentException(
+            UserEmailVerification userEmailVerification,
+            String message
+    ) {
+        // Arrange
+        int code = 123456;
+        String email = Randomizer.alphabeticGenerator(10) + "@gmail.com";
+        given(userRepository.findByEmail(anyString()))
+                .willReturn(Optional.of(user));
+        given(userEmailVerificationRepository.findUserEmailVerificationByUser(user))
+                .willReturn(Optional.of(userEmailVerification));
+        // Act
+        // Assert
+        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> userEmailVerificationService.verifyEmail(email, code));
+        Assertions.assertEquals("Code is not valid", exception.getMessage());
     }
 }

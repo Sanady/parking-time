@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface UserEmailVerificationRepository extends JpaRepository<UserEmailVerification, Integer> {
     Optional<UserEmailVerification> findUserEmailVerificationByUser(User user);
+    Optional<UserEmailVerification> findUserEmailVerificationByCode(int code);
 }

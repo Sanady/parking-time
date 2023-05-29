@@ -4,6 +4,7 @@ import com.parkingtime.authentication.models.User;
 import com.parkingtime.authentication.models.UserEmailVerification;
 import com.parkingtime.authentication.repositories.UserEmailVerificationRepository;
 import com.parkingtime.authentication.repositories.UserRepository;
+import com.parkingtime.common.exceptions.NotFoundException;
 import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
 import lombok.RequiredArgsConstructor;
@@ -48,24 +49,24 @@ public class UserEmailVerificationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     log.warn("User with email {} is not found", email);
-                    return new NullPointerException("User with email " + email + " is not found");
+                    return new NotFoundException("User with email " + email + " is not found");
                 });
 
         UserEmailVerification userEmailVerification = userEmailVerificationRepository
                 .findUserEmailVerificationByUser(user)
                 .orElseThrow(() -> {
                     log.warn("User is not found");
-                    return new NullPointerException("User is not found");
+                    return new NotFoundException("User is not found");
                 });
 
         if(userEmailVerification.getCode() != code) {
             log.warn("Code is not valid");
-            throw new NullPointerException("Code is not valid");
+            throw new IllegalArgumentException("Code is not valid");
         }
 
         if(userEmailVerification.getVerifiedAt() != null) {
             log.warn("Email is already verified");
-            throw new NullPointerException("Email is already verified");
+            throw new IllegalArgumentException("Email is already verified");
         }
 
         userEmailVerification.setVerifiedAt(LocalDateTime.now());
