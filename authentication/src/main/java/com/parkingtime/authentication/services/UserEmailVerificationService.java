@@ -55,8 +55,8 @@ public class UserEmailVerificationService {
         UserEmailVerification userEmailVerification = userEmailVerificationRepository
                 .findUserEmailVerificationByUser(user)
                 .orElseThrow(() -> {
-                    log.warn("User with email {} is not found", email);
-                    return new NullPointerException("User with email " + email + " is not found");
+                    log.warn("User is not found", email);
+                    return new NullPointerException("User is not found");
                 });
 
         if(userEmailVerification.getCode() != code) {
