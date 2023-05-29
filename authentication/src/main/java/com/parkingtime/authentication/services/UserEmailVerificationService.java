@@ -6,7 +6,6 @@ import com.parkingtime.authentication.repositories.UserEmailVerificationReposito
 import com.parkingtime.authentication.repositories.UserRepository;
 import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class UserEmailVerificationService {
         UserEmailVerification userEmailVerification = userEmailVerificationRepository
                 .findUserEmailVerificationByUser(user)
                 .orElseThrow(() -> {
-                    log.warn("User is not found", email);
+                    log.warn("User is not found");
                     return new NullPointerException("User is not found");
                 });
 
