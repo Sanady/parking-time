@@ -1,0 +1,34 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: authentication
+  datasource:
+    url: jdbc:postgresql://mouse.db.elephantsql.com:5432/mxeqgsdp
+    username: mxeqgsdp
+    password: AVMYTZTNzCycVeCpH4AmlwPD0OtF57qT
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    username: office.ratify@gmail.com
+    password: kgoncyuqaohznkkz
+    port: 587
+    host: smtp.gmail.com
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
