@@ -74,15 +74,24 @@ public class User implements UserDetails {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",
+                cascade = {
+                    CascadeType.REMOVE
+                })
     @ToString.Exclude
     private transient Set<UserResetPasswordToken> userResetPasswordTokens;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",
+                cascade = {
+                    CascadeType.REMOVE
+                })
     @ToString.Exclude
     private transient Set<UserResetPasswordHistory> userResetPasswordHistories;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user",
+                cascade = {
+                    CascadeType.REMOVE
+                })
     private transient UserEmailVerification userEmailVerification;
 
     public User(String firstname,
