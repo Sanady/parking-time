@@ -49,7 +49,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {IllegalArgumentException.class})
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(HttpServletRequest request, IllegalArgumentException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(createErrorResponse(request, ex, ErrorCode.ILLEGAL_ARGUMENT));
@@ -59,7 +59,7 @@ public class ExceptionMapper {
     @ResponseStatus(code = HttpStatus.CONFLICT)
     public ResponseEntity<ErrorResponse> handleUserConflictException(HttpServletRequest request,
                                                                      UserConflictException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(ex.getHttpStatus())
                 .body(createErrorResponse(request, ex, ex.getCode()));
@@ -68,7 +68,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {NotFoundException.class})
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleNotFoundException(HttpServletRequest request, NotFoundException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(ex.getHttpStatus())
                 .body(createErrorResponse(request, ex, ex.getCode()));
@@ -77,7 +77,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {AlreadyExistsException.class})
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleAlreadyExistsException(HttpServletRequest request, AlreadyExistsException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(ex.getHttpStatus())
                 .body(createErrorResponse(request, ex, ex.getCode()));
@@ -86,7 +86,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {AuthenticationException.class})
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(HttpServletRequest request, AuthenticationException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createErrorResponse(request, ex, ErrorCode.UNAUTHORIZED));
@@ -95,7 +95,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {ConstraintViolationException.class})
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(HttpServletRequest request, ConstraintViolationException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(createErrorResponse(request, ex, ErrorCode.CONSTRAINT_VIOLATION));
@@ -104,7 +104,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {ExpiredJwtException.class})
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleExpiredJwtException(HttpServletRequest request, ExpiredJwtException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createErrorResponse(request, ex, ErrorCode.UNAUTHORIZED));
@@ -113,7 +113,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {UnsupportedJwtException.class})
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleUnsupportedJwtException(HttpServletRequest request, UnsupportedJwtException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createErrorResponse(request, ex, ErrorCode.UNAUTHORIZED));
@@ -122,7 +122,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {MalformedJwtException.class})
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleMalformedJwtException(HttpServletRequest request, MalformedJwtException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createErrorResponse(request, ex, ErrorCode.UNAUTHORIZED));
@@ -131,7 +131,7 @@ public class ExceptionMapper {
     @ExceptionHandler(value = {SignatureException.class})
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ResponseEntity<ErrorResponse> handleSignatureException(HttpServletRequest request, SignatureException ex) {
-        log.error("{}", ex.getMessage());
+        log.warn("{}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createErrorResponse(request, ex, ErrorCode.UNAUTHORIZED));
@@ -156,7 +156,7 @@ public class ExceptionMapper {
     }
 
     private ResponseEntity<ErrorResponse> processInvalidRequest(HttpServletRequest request, Exception e) {
-        log.error("Invalid request error: {}", e.getMessage());
+        log.warn("Invalid request error: {}", e.getMessage());
         return ResponseEntity
                 .badRequest()
                 .body(createErrorResponse(request, e, ErrorCode.INVALID_REQUEST_DATA));

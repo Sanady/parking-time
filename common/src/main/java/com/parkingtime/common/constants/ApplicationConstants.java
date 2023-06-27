@@ -23,6 +23,7 @@ public class ApplicationConstants {
     public static final String EMAIL_VERIFICATION = "/email-verification";
     public static final String VERIFY_EMAIL = "/verify-email";
 
-    public static final String CUSTOMER = V1 + "/customer";
-    public static final String GET_CUSTOMER = "/{customerId}";
+    public static final String USER = V1 + "/user";
+    public static final String GET_USER = "/{email}";
+    public static final String CHANGE_USER_PASSWORD = GET_USER + "/password-change";
 }
