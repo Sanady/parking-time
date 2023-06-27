@@ -4,9 +4,10 @@ import com.parkingtime.authentication.models.User;
 import com.parkingtime.authentication.models.UserEmailVerification;
 import com.parkingtime.authentication.repositories.UserEmailVerificationRepository;
 import com.parkingtime.authentication.repositories.UserRepository;
-import com.parkingtime.common.exceptions.NotFoundException;
+import com.parkingtime.common.exceptions.CoverUpMessageException;
 import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
+import com.parkingtime.common.utilities.TimeUtilities;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserEmailVerificationService {
     private final UserRepository userRepository;
-    private final EmailService emailService;
     private final UserEmailVerificationRepository userEmailVerificationRepository;
 
     public UserEmailVerification sendVerificationEmail(String email) {
@@ -38,6 +38,7 @@ public class UserEmailVerificationService {
         UserEmailVerification userEmailVerification = UserEmailVerification.builder()
                 .user(user)
                 .code(code)
+                .active(true)
                 .createdAt(LocalDateTime.now())
                 .verifiedAt(null)
                 .build();
@@ -49,24 +50,31 @@ public class UserEmailVerificationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     log.warn("User with email {} is not found", email);
-                    return new NotFoundException("User with email " + email + " is not found");
+                    throw new CoverUpMessageException("Email is verified");
                 });
 
         UserEmailVerification userEmailVerification = userEmailVerificationRepository
                 .findUserEmailVerificationByUser(user)
                 .orElseThrow(() -> {
                     log.warn("User is not found");
-                    return new NotFoundException("User is not found");
+                    throw new CoverUpMessageException("Email is verified");
                 });
 
-        if(userEmailVerification.getCode() != code) {
+        if(userEmailVerification.getCode() != code || !userEmailVerification.getActive()) {
             log.warn("Code is not valid");
-            throw new IllegalArgumentException("Code is not valid");
+            throw new CoverUpMessageException("Email is verified");
+        }
+
+        if(TimeUtilities.isAtLeastFiveMinutesAgo(userEmailVerification.getCreatedAt())) {
+            userEmailVerification.setActive(false);
+            userEmailVerificationRepository.save(userEmailVerification);
+            log.warn("Code has expired about 5 minutes ago or even longer");
+            throw new CoverUpMessageException("Email is verified");
         }
 
         if(userEmailVerification.getVerifiedAt() != null) {
             log.warn("Email is already verified");
-            throw new IllegalArgumentException("Email is already verified");
+            throw new CoverUpMessageException("Email is verified");
         }
 
         userEmailVerification.setVerifiedAt(LocalDateTime.now());

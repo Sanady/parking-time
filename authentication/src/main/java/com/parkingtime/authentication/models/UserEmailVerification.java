@@ -43,6 +43,9 @@ public class UserEmailVerification {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy HH:mm:ss")
     private LocalDateTime verifiedAt;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;

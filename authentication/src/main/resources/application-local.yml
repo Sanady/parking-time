@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/parkingtime
+    username: testuser
+    password: ivan3214
+  mail:
+    username: office.ratify@gmail.com
+    password: kgoncyuqaohznkkz
+    port: 587
+    host: smtp.gmail.com
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

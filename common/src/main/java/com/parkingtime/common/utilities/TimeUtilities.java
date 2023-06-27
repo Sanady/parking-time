@@ -20,7 +20,7 @@ public class TimeUtilities {
     public static boolean isAtLeastFiveMinutesAgo(LocalDateTime date) {
         Date convertedDate = convertLocalDateTimeToDateUsingInstant(date);
         Instant instant = Instant.ofEpochMilli(convertedDate.getTime());
-        Instant twentyMinutesAgo = Instant.now().minus(Duration.ofMinutes(5));
-        return instant.isBefore(twentyMinutesAgo);
+        Instant fiveMinutesAgo = Instant.now().minus(Duration.ofMinutes(5));
+        return instant.isBefore(fiveMinutesAgo);
     }
 }
