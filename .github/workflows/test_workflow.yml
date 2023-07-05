@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Test workflow
 on:
   workflow_dispatch:
   push:
@@ -24,11 +24,3 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Run Tests
         run: mvn -B test
-      - name: Upload Test Results
-        uses: dorny/test-reporter@v1
-        if: always()
-        with:
-          name: Maven Tests
-          path: target/surefire-reports/*.xml
-          reporter: java-junit
-          fail-on-error: true
