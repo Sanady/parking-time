@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.parkingtime.common.enums.ErrorMessages.NOT_VALID_EMAIL;
+import static com.parkingtime.common.enums.MessageEnum.EMAIL_IS_VERIFIED;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,8 +26,8 @@ public class UserEmailVerificationService {
 
     public UserEmailVerification sendVerificationEmail(String email) {
         if(email == null || email.isEmpty() || email.isBlank()) {
-            log.warn("Email is not valid");
-            throw new NullPointerException("Email is not valid");
+            log.warn(NOT_VALID_EMAIL.getValue());
+            throw new NullPointerException(NOT_VALID_EMAIL.getValue());
         }
 
         User user = userRepository.findByEmail(email)
@@ -50,35 +53,35 @@ public class UserEmailVerificationService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> {
                     log.warn("User with email {} is not found", email);
-                    throw new CoverUpMessageException("Email is verified");
+                    return new CoverUpMessageException(EMAIL_IS_VERIFIED.getValue());
                 });
 
         UserEmailVerification userEmailVerification = userEmailVerificationRepository
                 .findUserEmailVerificationByUser(user)
                 .orElseThrow(() -> {
                     log.warn("User is not found");
-                    throw new CoverUpMessageException("Email is verified");
+                    return new CoverUpMessageException(EMAIL_IS_VERIFIED.getValue());
                 });
 
-        if(userEmailVerification.getCode() != code || !userEmailVerification.getActive()) {
-            log.warn("Code is not valid");
-            throw new CoverUpMessageException("Email is verified");
+        if(userEmailVerification.getCode() != code || Boolean.FALSE.equals(userEmailVerification.getActive())) {
+            log.warn("Code is not valid or is not active");
+            throw new CoverUpMessageException(EMAIL_IS_VERIFIED.getValue());
         }
 
         if(TimeUtilities.isAtLeastFiveMinutesAgo(userEmailVerification.getCreatedAt())) {
             userEmailVerification.setActive(false);
             userEmailVerificationRepository.save(userEmailVerification);
             log.warn("Code has expired about 5 minutes ago or even longer");
-            throw new CoverUpMessageException("Email is verified");
+            throw new CoverUpMessageException(EMAIL_IS_VERIFIED.getValue());
         }
 
         if(userEmailVerification.getVerifiedAt() != null) {
             log.warn("Email is already verified");
-            throw new CoverUpMessageException("Email is verified");
+            throw new CoverUpMessageException(EMAIL_IS_VERIFIED.getValue());
         }
 
         userEmailVerification.setVerifiedAt(LocalDateTime.now());
         userEmailVerificationRepository.save(userEmailVerification);
-        return new MessageResponse("Email is verified");
+        return new MessageResponse(EMAIL_IS_VERIFIED.getValue());
     }
 }

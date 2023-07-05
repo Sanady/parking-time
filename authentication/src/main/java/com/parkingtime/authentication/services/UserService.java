@@ -25,6 +25,8 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User with this email does not exists!"));
         log.info("Get user has been called for user with email {}", email);
+        UserEmailVerification userEmailVerification = userEmailVerificationRepository.findUserEmailVerificationByUser(user)
+                .orElse(null);
         return GetUserResponse
                 .builder()
                 .id(user.getId())
@@ -33,6 +35,8 @@ public class UserService {
                 .email(user.getEmail())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+                .verified(userEmailVerification != null ? userEmailVerification.getActive() : Boolean.FALSE)
+                .verifiedAt(userEmailVerification != null ? userEmailVerification.getVerifiedAt() : null)
                 .build();
     }
 
@@ -44,17 +48,19 @@ public class UserService {
                 .findUserEmailVerificationByUser(user)
                 .orElseThrow(() -> new NotFoundException("User email is not verified!"));
 
-        if(!userEmailVerification.getActive() || userEmailVerification.getVerifiedAt() == null) {
+        if(Boolean.TRUE.equals(!userEmailVerification.getActive()) || userEmailVerification.getVerifiedAt() == null) {
             throw new NotFoundException("User email is not verified!");
-        }
-
-        if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+        } else if(!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("User old password does not match with the password from the request!");
-        }
-
-        if(!request.getNewPassword().equals(request.getConfirmPassword())) {
+        } else if(!request.getNewPassword().equals(request.getConfirmPassword())) {
             throw new IllegalArgumentException("User new password and confirmation password does not matches!");
         }
-        return null;
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        log.info("User with email {} has changed his password", email);
+        return MessageResponse
+                .builder()
+                .message("User password has been changed successfully!")
+                .build();
     }
 }

@@ -39,7 +39,7 @@ public class UserResetPasswordToken {
 
     private String method;
 
-    @Column(name = "used_token")
+    @Column(name = "used_token", columnDefinition = "boolean default false")
     private Boolean usedToken;
 
     @Column(name = "consumed_at")

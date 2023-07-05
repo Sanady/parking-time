@@ -15,7 +15,6 @@ import com.parkingtime.common.requests.ResetPasswordRequest;
 import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
 import com.parkingtime.common.utilities.TimeUtilities;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -42,13 +41,10 @@ public class UserResetPasswordTokenService {
 
         if(userResetPasswordTokenRepository.findUserResetPasswordTokenByUser(user).isPresent()) {
             UserResetPasswordToken alreadyExistingToken = userResetPasswordTokenRepository.findUserResetPasswordTokenByUser(user)
-                    .orElseThrow(() -> {
-                        log.error("User with {} email is trying to abuse the forget password request", user.getEmail());
-                        return new CoverUpMessageException(MessageEnum.PLEASE_CHECK_INBOX.getValue());
-                    });
+                    .orElseThrow();
 
-            if(Boolean.TRUE.equals(userResetPasswordTokenRepository.countByUser(user) > 0 &&
-                    !alreadyExistingToken.getUsedToken()) &&
+            if(Boolean.TRUE.equals(userResetPasswordTokenRepository.countByUser(user) > 0 ||
+                    !alreadyExistingToken.getUsedToken()) ||
                     !TimeUtilities.isAtLeastFiveMinutesAgo(alreadyExistingToken.getCreatedAt())) {
                 log.error("User with email {} is trying to input expired token or already used token", user.getEmail());
                 throw new CoverUpMessageException(MessageEnum.PLEASE_CHECK_INBOX.getValue());

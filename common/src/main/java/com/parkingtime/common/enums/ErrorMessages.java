@@ -9,6 +9,7 @@ public enum ErrorMessages {
     ROLE_NOT_FOUND("Role not found."),
     USER_EMAIL_NOT_FOUND("User does not exists with this email"),
     CITY_ALREADY_EXISTS("City already exists"),
+    NOT_VALID_EMAIL("Email is not valid"),
     USER_DOES_NOT_CONTAIN_SPECIFIC_ROLE("User does not contain specific role"),
     USER_ALREADY_EXISTS_IN_SYSTEM("User is already existing in system, please try again.");
 

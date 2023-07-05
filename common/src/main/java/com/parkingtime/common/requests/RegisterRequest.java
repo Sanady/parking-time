@@ -25,17 +25,21 @@ public class RegisterRequest {
         @NotEmpty(message = "Firstname cannot be empty, please checkout your input.")
         @NotNull(message = "Firstname cannot be empty, please checkout your input.")
         private String firstname;
+
         @Size(max = 32)
         @Pattern(regexp = ApplicationConstants.ONLY_CHARACTERS)
         @NotBlank(message = "Lastname cannot be empty, please checkout your input.")
         @NotEmpty(message = "Lastname cannot be empty, please checkout your input.")
         @NotNull(message = "Lastname cannot be empty, please checkout your input.")
         private String lastname;
+
         @Email(message = "Email has to be in correct format.", regexp = ApplicationConstants.EMAIL_REGEX)
         @NotBlank(message = "Email cannot be empty, please checkout your input.")
         @NotEmpty(message = "Email cannot be empty, please checkout your input.")
         @NotNull(message = "Email cannot be empty, please checkout your input.")
         private String email;
+
         private String password;
+
         private Set<String> roles;
 }

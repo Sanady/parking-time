@@ -7,6 +7,7 @@ import com.parkingtime.authentication.repositories.UserEmailVerificationReposito
 import com.parkingtime.authentication.repositories.UserRepository;
 import com.parkingtime.authentication.services.UserEmailVerificationService;
 import com.parkingtime.common.enums.RoleEnum;
+import com.parkingtime.common.exceptions.CoverUpMessageException;
 import com.parkingtime.common.exceptions.NotFoundException;
 import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 
+import static com.parkingtime.common.enums.MessageEnum.EMAIL_IS_VERIFIED;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -72,6 +74,8 @@ class UserEmailVerificationServiceTests {
                 .lastname(Randomizer.alphabeticGenerator(10))
                 .password(Randomizer.alphabeticGenerator(10))
                 .roles(Set.of(new Role(RoleEnum.ROLE_USER)))
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -111,17 +115,18 @@ class UserEmailVerificationServiceTests {
     @DisplayName("verifyEmail - verify email - success")
     void verifyEmail_verifyEmail_returnsMessageResponse() {
         // Arrange
-        UserEmailVerification userEmailVerification = UserEmailVerification.builder()
-                .user(user)
-                .code(Randomizer.numberGenerator(6))
-                .build();
+        int code = 123456;
+        String email = Randomizer.alphabeticGenerator(10) + "@gmail.com";
         given(userRepository.findByEmail(anyString()))
                 .willReturn(Optional.of(user));
         given(userEmailVerificationRepository.findUserEmailVerificationByUser(user))
-                .willReturn(Optional.of(userEmailVerification));
+                .willReturn(Optional.of(UserEmailVerification.builder()
+                        .user(user)
+                        .code(code)
+                        .createdAt(LocalDateTime.now())
+                        .build()));
         // Act
-        MessageResponse messageResponse = userEmailVerificationService
-                .verifyEmail(user.getEmail(), userEmailVerification.getCode());
+        MessageResponse messageResponse = userEmailVerificationService.verifyEmail(email, code);
         // Assert
         Assertions.assertAll(() -> {
             Assertions.assertNotNull(messageResponse);
@@ -139,9 +144,9 @@ class UserEmailVerificationServiceTests {
                 .willReturn(Optional.empty());
         // Act
         // Assert
-        NotFoundException exception = Assertions.assertThrows(NotFoundException.class,
+        CoverUpMessageException exception = Assertions.assertThrows(CoverUpMessageException.class,
                 () -> userEmailVerificationService.verifyEmail(email, code));
-        Assertions.assertEquals("User with email " + email + " is not found", exception.getMessage());
+        Assertions.assertEquals(EMAIL_IS_VERIFIED.getValue(), exception.getMessage());
     }
 
     @ParameterizedTest(name = "#{index} - Test with code = {1}")
@@ -160,8 +165,8 @@ class UserEmailVerificationServiceTests {
                 .willReturn(Optional.of(userEmailVerification));
         // Act
         // Assert
-        IllegalArgumentException exception = Assertions.assertThrows(IllegalArgumentException.class,
+        CoverUpMessageException exception = Assertions.assertThrows(CoverUpMessageException.class,
                 () -> userEmailVerificationService.verifyEmail(email, code));
-        Assertions.assertEquals("Code is not valid", exception.getMessage());
+        Assertions.assertEquals(EMAIL_IS_VERIFIED.getValue(), exception.getMessage());
     }
 }

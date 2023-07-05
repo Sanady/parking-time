@@ -7,6 +7,7 @@ public enum MessageEnum {
     SUCCESSFULLY_RESET_PASSWORD("You have successfully reset password, try log in with new password."),
     CITY_SUCCESSFULLY_ADDED("City has been successfully added"),
     ROLES_ADDED("Roles have been successfully added"),
+    EMAIL_IS_VERIFIED("Email is verified"),
     ROLE_REMOVED("Role has been removed from a user"),
     PLEASE_CHECK_INBOX("Please check your email inbox.");
 

@@ -31,7 +31,9 @@ public class UserController {
     @PreAuthorize(value = "hasRole('ROLE_USER')")
     @PatchMapping(CHANGE_USER_PASSWORD)
     public ResponseEntity<MessageResponse> changeUserPassword(@PathVariable String email,
-                                                             @Validated ChangeUserPasswordRequest request) {
-        return null;
+                                                             @Validated @RequestBody ChangeUserPasswordRequest request) {
+        return ResponseEntity
+                .accepted()
+                .body(userService.changeUserPassword(email, request));
     }
 }

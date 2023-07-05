@@ -8,6 +8,7 @@ import com.parkingtime.authentication.repositories.RoleRepository;
 import com.parkingtime.authentication.repositories.UserRepository;
 import com.parkingtime.common.enums.ErrorMessages;
 import com.parkingtime.common.enums.RoleEnum;
+import com.parkingtime.common.exceptions.LocalAuthenticationException;
 import com.parkingtime.common.exceptions.UserConflictException;
 import com.parkingtime.common.requests.AuthenticationRequest;
 import com.parkingtime.common.requests.RegisterRequest;
@@ -104,7 +105,7 @@ public class AuthenticationService {
             )
         );
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow();
+                .orElseThrow(() -> new LocalAuthenticationException(ErrorMessages.USER_EMAIL_NOT_FOUND.getValue()));
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
