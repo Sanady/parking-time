@@ -1,4 +1,4 @@
-package com.parkingtime.authentication;
+package com.parkingtime.authentication.services;
 
 import com.parkingtime.authentication.models.Role;
 import com.parkingtime.authentication.models.User;

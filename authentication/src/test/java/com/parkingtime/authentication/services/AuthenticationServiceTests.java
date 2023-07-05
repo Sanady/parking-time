@@ -1,4 +1,4 @@
-package com.parkingtime.authentication;
+package com.parkingtime.authentication.services;
 
 import com.parkingtime.authentication.configs.ApplicationConfig;
 import com.parkingtime.authentication.configs.JwtService;
