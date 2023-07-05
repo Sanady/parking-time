@@ -8,7 +8,6 @@ import com.parkingtime.authentication.repositories.UserRepository;
 import com.parkingtime.authentication.services.UserEmailVerificationService;
 import com.parkingtime.common.enums.RoleEnum;
 import com.parkingtime.common.exceptions.CoverUpMessageException;
-import com.parkingtime.common.exceptions.NotFoundException;
 import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
 import org.junit.jupiter.api.Assertions;
