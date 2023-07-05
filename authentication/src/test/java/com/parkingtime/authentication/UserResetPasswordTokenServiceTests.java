@@ -7,6 +7,8 @@ import com.parkingtime.authentication.repositories.UserResetPasswordHistoryRepos
 import com.parkingtime.authentication.repositories.UserResetPasswordTokenRepository;
 import com.parkingtime.authentication.services.UserResetPasswordTokenService;
 import com.parkingtime.common.exceptions.CoverUpMessageException;
+import com.parkingtime.common.requests.ResetPasswordRequest;
+import com.parkingtime.common.responses.MessageResponse;
 import com.parkingtime.common.utilities.Randomizer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -120,5 +122,141 @@ class UserResetPasswordTokenServiceTests {
         // Act
         // Assert
         Assertions.assertThrows(CoverUpMessageException.class, () -> userResetPasswordTokenService.forgetPassword(email));
+    }
+
+    @Test
+    @DisplayName("resetPassword - reset password - success")
+    void resetPassword_resetPasswordWithCorrectData_returnsMessageResponseObject() {
+        // Arrange
+        // ---> Variables
+        String email = Randomizer.alphabeticGenerator(16) + "@gmail.com";
+        String password = Randomizer.alphabeticGenerator(1).toUpperCase() +
+                Randomizer.alphabeticGenerator(9) +
+                Randomizer.numericGenerator(2) +
+                "@";
+        String token = Randomizer.alphabeticGenerator(16);
+        // ---> Objects
+        User user = User
+                .builder()
+                .email(email)
+                .password(password)
+                .build();
+        UserResetPasswordToken userResetPasswordToken = UserResetPasswordToken
+                .builder()
+                .user(user)
+                .token(token)
+                .usedToken(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+        ResetPasswordRequest request = ResetPasswordRequest
+                .builder()
+                .newPassword(password)
+                .confirmPassword(password)
+                .token(token)
+                .build();
+        // ---> Mocking
+        given(userResetPasswordTokenRepository.findByToken(token)).willReturn(Optional.of(userResetPasswordToken));
+        // Act
+        MessageResponse messageResponse = userResetPasswordTokenService.resetPassword(request);
+        // Assert
+        Assertions.assertEquals("You have successfully reset password, try log in with new password.", messageResponse.message());
+    }
+
+    @Test
+    @DisplayName("resetPassword - reset password with wrong token - failure")
+    void resetPassword_resetPasswordWithWrongToken_throwsCoverUpMessageException() {
+        // Arrange
+        // ---> Variables
+        String password = Randomizer.alphabeticGenerator(1).toUpperCase() +
+                Randomizer.alphabeticGenerator(9) +
+                Randomizer.numericGenerator(2) +
+                "@";
+        String token = Randomizer.alphabeticGenerator(16);
+        // ---> Objects
+        ResetPasswordRequest request = ResetPasswordRequest
+                .builder()
+                .newPassword(password)
+                .confirmPassword(password)
+                .token(token)
+                .build();
+        // ---> Mocking
+        given(userResetPasswordTokenRepository.findByToken(token)).willReturn(Optional.empty());
+        // Act
+        // Assert
+        Assertions.assertThrows(CoverUpMessageException.class, () -> userResetPasswordTokenService.resetPassword(request));
+    }
+
+    @Test
+    @DisplayName("resetPassword - reset password with used token - failure")
+    void resetPassword_resetPasswordWithUsedToken_throwsIllegalArgumentException() {
+        // Arrange
+        // ---> Variables
+        String email = Randomizer.alphabeticGenerator(16) + "@gmail.com";
+        String password = Randomizer.alphabeticGenerator(1).toUpperCase() +
+                Randomizer.alphabeticGenerator(9) +
+                Randomizer.numericGenerator(2) +
+                "@";
+        String token = Randomizer.alphabeticGenerator(16);
+        // ---> Objects
+        User user = User
+                .builder()
+                .email(email)
+                .password(password)
+                .build();
+        UserResetPasswordToken userResetPasswordToken = UserResetPasswordToken
+                .builder()
+                .user(user)
+                .token(token)
+                .usedToken(true)
+                .createdAt(LocalDateTime.now())
+                .build();
+        ResetPasswordRequest request = ResetPasswordRequest
+                .builder()
+                .newPassword(password)
+                .confirmPassword(password)
+                .token(token)
+                .build();
+        // ---> Mocking
+        given(userResetPasswordTokenRepository.findByToken(token)).willReturn(Optional.of(userResetPasswordToken));
+        // Act
+        // Assert
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userResetPasswordTokenService.resetPassword(request));
+    }
+
+    @Test
+    @DisplayName("resetPassword - reset password with wrong password - failure")
+    void resetPassword_resetPasswordWithWrongPassword_throwsIllegalArgumentException() {
+        // Arrange
+        // ---> Variables
+        String email = Randomizer.alphabeticGenerator(16) + "@gmail.com";
+        String password = Randomizer.alphabeticGenerator(1).toUpperCase() +
+                Randomizer.alphabeticGenerator(9) +
+                Randomizer.numericGenerator(2) +
+                "@";
+        String token = Randomizer.alphabeticGenerator(16);
+        // ---> Objects
+        User user = User
+                .builder()
+                .email(email)
+                .password(password)
+                .build();
+        UserResetPasswordToken userResetPasswordToken = UserResetPasswordToken
+                .builder()
+                .user(user)
+                .token(token)
+                .usedToken(false)
+                .createdAt(LocalDateTime.now())
+                .build();
+        ResetPasswordRequest request = ResetPasswordRequest
+                .builder()
+                .newPassword(password + Randomizer.alphabeticGenerator(1))
+                .confirmPassword(password)
+                .token(token)
+                .build();
+        // ---> Mocking
+        given(userResetPasswordTokenRepository.findByToken(token)).willReturn(Optional.of(userResetPasswordToken));
+        // Act
+        // Assert
+        Assertions.assertThrows(IllegalArgumentException.class, () -> userResetPasswordTokenService.resetPassword(request));
     }
 }
