@@ -25,5 +25,8 @@ public class ApplicationConstants {
 
     public static final String USER = V1 + "/user";
     public static final String GET_USER = "/{email}";
-    public static final String CHANGE_USER_PASSWORD = GET_USER + "/password-change";
+    public static final String CHANGE_USER_PASSWORD = GET_USER + "/change-password";
+
+    public static final String VEHICLE = V1 + "/vehicle";
+
 }

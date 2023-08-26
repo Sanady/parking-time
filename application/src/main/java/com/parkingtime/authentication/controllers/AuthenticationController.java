@@ -21,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.parkingtime.common.constants.ApplicationConstants.*;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @Slf4j
 @RestController
@@ -35,13 +36,17 @@ public class AuthenticationController {
     @PostMapping(REGISTRATION)
     public ResponseEntity<MessageResponse> register(
             @Validated @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+        return ResponseEntity
+                .status(CREATED)
+                .body(authenticationService.register(request));
     }
 
     @PostMapping(AUTHENTICATE)
     public ResponseEntity<AuthenticationResponse> authenticate(
             @Validated @RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        return ResponseEntity
+                .accepted()
+                .body(authenticationService.authenticate(request));
     }
 
     @PostMapping(FORGET_PASSWORD)
@@ -54,7 +59,7 @@ public class AuthenticationController {
                     "Reset password",
                     emailService.generateResetPasswordContent(resetPasswordToken));
         } catch (MessagingException e) {
-            e.printStackTrace();
+            log.warn("{}", e.getMessage());
         }
         return ResponseEntity
                 .accepted()
@@ -77,8 +82,7 @@ public class AuthenticationController {
             emailService.sendMail(email, "Verification Code", "Your verification code is " +
                     userEmailVerification.getCode());
         } catch (MessagingException e) {
-            log.error("Error while sending email to {}", email);
-            e.printStackTrace();
+            log.warn("{}", e.getMessage());
         }
         log.info("Verification code is sent to {}", email);
         return ResponseEntity

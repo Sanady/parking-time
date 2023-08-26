@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -98,6 +99,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                 request.getEmail(),
@@ -112,7 +114,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .tokenType("Bearer")
                 .email(user.getEmail())
-                .tokenExpiration(String.valueOf(new Date(System.currentTimeMillis() + 1000 * 60 * 24)))
+                .tokenExpiration(simpleDateFormat.format(new Date(System.currentTimeMillis() + 1000 * 60 * 24)))
                 .roles(user
                         .getRoles()
                         .stream()

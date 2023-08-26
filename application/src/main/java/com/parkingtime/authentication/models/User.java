@@ -88,6 +88,13 @@ public class User implements UserDetails {
     @ToString.Exclude
     private transient Set<UserResetPasswordHistory> userResetPasswordHistories;
 
+    @OneToMany(mappedBy = "user",
+            cascade = {
+                    CascadeType.REMOVE
+            })
+    @ToString.Exclude
+    private transient Set<Vehicle> vehicles;
+
     @OneToOne(mappedBy = "user",
                 cascade = {
                     CascadeType.REMOVE

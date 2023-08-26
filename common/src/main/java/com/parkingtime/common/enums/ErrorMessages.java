@@ -14,7 +14,8 @@ public enum ErrorMessages {
     USER_OLD_PASSWORD_DOES_NOT_MATCH("User old password does not match with the password from the request!"),
     USER_NEW_PASSWORD_DOES_NOT_MATCH("User new password and confirmation password does not matches!"),
     USER_DOES_NOT_CONTAIN_SPECIFIC_ROLE("User does not contain specific role"),
-    USER_ALREADY_EXISTS_IN_SYSTEM("User is already existing in system, please try again.");
+    USER_ALREADY_EXISTS_IN_SYSTEM("User is already existing in system, please try again."),
+    VEHICLE_NOT_FOUND("Vehicle not found");
 
     private final String value;
 
