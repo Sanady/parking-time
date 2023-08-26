@@ -15,12 +15,12 @@ import java.util.List;
 @Slf4j
 @EnableScheduling
 @SpringBootApplication
-public class AuthenticationApplication implements CommandLineRunner {
+public class ParkingTimeApplication implements CommandLineRunner {
     @Autowired
     private RoleRepository roleRepository;
 
     public static void main(String[] args) {
-        SpringApplication.run(AuthenticationApplication.class, args);
+        SpringApplication.run(ParkingTimeApplication.class, args);
     }
 
     @Override
