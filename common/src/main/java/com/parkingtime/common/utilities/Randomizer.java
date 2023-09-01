@@ -47,4 +47,21 @@ public class Randomizer {
         }
         return sb.toString();
     }
+
+    public static String specialCharacterGenerator(int size) {
+        String stringArray = "!@#$%^&*()_+";
+        sb = new StringBuilder(size);
+        for(int i = 0; i < size; ++i) {
+            int index = (int)(stringArray.length() * Math.random());
+            sb.append(stringArray.charAt(index));
+        }
+        return sb.toString();
+    }
+
+    public static String passwordGenerator() {
+        return alphabeticGenerator(2).toUpperCase() +
+                alphaNumericGenerator(10) +
+                specialCharacterGenerator(1) +
+                numericGenerator(1);
+    }
 }

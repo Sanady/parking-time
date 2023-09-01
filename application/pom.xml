@@ -62,12 +62,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.passay</groupId>
-            <artifactId>passay</artifactId>
-            <version>${org.passay.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.parkingtime.parking-time-project</groupId>
             <artifactId>common</artifactId>
             <version>${parent.version}</version>

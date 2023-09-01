@@ -1,5 +1,6 @@
 package com.parkingtime.common.requests;
 
+import com.parkingtime.common.annotations.PasswordValidation;
 import com.parkingtime.common.constants.ApplicationConstants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -39,6 +40,7 @@ public class RegisterRequest {
         @NotNull(message = "Email cannot be empty, please checkout your input.")
         private String email;
 
+        @PasswordValidation
         private String password;
 
         private Set<String> roles;
