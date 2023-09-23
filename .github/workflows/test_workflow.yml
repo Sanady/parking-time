@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - master
+
+permissions:
+  id-token: write
+  contents: read
+  checks: write
+
 jobs:
   tests:
     name: Tests
@@ -31,6 +37,3 @@ jobs:
           name: Java Tests
           path: application/target/surefire-reports/TEST-*.xml
           reporter: java-junit
-          permissions:
-            id-token: write
-            contents: read
