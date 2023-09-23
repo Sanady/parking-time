@@ -29,5 +29,5 @@ jobs:
         if: success() || failure()
         with:
           name: JEST Tests
-          path: .github/workflows/reports/jest-*.xml
+          path: reports/jest-*.xml
           reporter: jest-junit
