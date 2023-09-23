@@ -29,5 +29,5 @@ jobs:
         if: success() || failure()
         with:
           name: JEST Tests
-          path: application/target/surefire-reports
+          path: application/target/surefire-reports/TEST-*.xml
           reporter: java-junit
