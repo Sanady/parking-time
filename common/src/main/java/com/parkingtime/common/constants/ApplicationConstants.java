@@ -30,4 +30,6 @@ public class ApplicationConstants {
 
     public static final String VEHICLE = V1 + "/vehicle";
 
+    public static final String CITY = V1 + "/city";
+
 }
