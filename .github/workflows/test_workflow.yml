@@ -28,6 +28,9 @@ jobs:
         uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
-          name: JEST Tests
+          name: Java Tests
           path: application/target/surefire-reports/TEST-*.xml
           reporter: java-junit
+          permissions:
+            id-token: write
+            contents: read
