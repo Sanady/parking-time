@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.parkingtime.common.constants.ApplicationConstants.VEHICLE;
+import static com.parkingtime.common.constants.ApplicationConstants.VEHICLE_BY_ID;
+import static com.parkingtime.common.constants.ApplicationConstants.VEHICLE_BY_LICENCE_PLATE_PARAM;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Slf4j
@@ -30,19 +32,19 @@ public class VehicleController {
     }
 
     @PreAuthorize(value = "hasRole('ROLE_USER')")
-    @GetMapping("/{vehicleId}")
+    @GetMapping(VEHICLE_BY_ID)
     public ResponseEntity<Vehicle> getVehicle(@PathVariable Long vehicleId) {
         return ResponseEntity.ok(vehicleService.getVehicle(vehicleId));
     }
 
     @PreAuthorize(value = "hasRole('ROLE_USER')")
-    @GetMapping("/licence-plate/{licencePlate}")
+    @GetMapping(VEHICLE_BY_LICENCE_PLATE_PARAM)
     public ResponseEntity<Vehicle> getVehicleByLicencePlate(@PathVariable String licencePlate) {
         return ResponseEntity.ok(vehicleService.getVehicleByLicencePlate(licencePlate));
     }
 
     @PreAuthorize(value = "hasRole('ROLE_USER')")
-    @DeleteMapping("/{vehicleId}")
+    @DeleteMapping(VEHICLE_BY_ID)
     public ResponseEntity<Void> deleteVehicle(@PathVariable Long vehicleId) {
         vehicleService.deleteVehicle(vehicleId);
         return ResponseEntity

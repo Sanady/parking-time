@@ -7,6 +7,7 @@ import com.parkingtime.services.GarageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.parkingtime.common.constants.ApplicationConstants.GARAGE;
+import static com.parkingtime.common.constants.ApplicationConstants.ID;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @Slf4j
@@ -26,6 +28,7 @@ import static org.springframework.http.HttpStatus.CREATED;
 public class GarageController {
     private final GarageService garageService;
 
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<CreateGarageResponse> createGarage(
             @Validated @RequestBody CreateGarageRequest request) {
@@ -34,14 +37,16 @@ public class GarageController {
                 .body(garageService.createGarage(request));
     }
 
-    @GetMapping("/{id}")
+    @PreAuthorize(value = "hasRole('ROLE_USER')")
+    @GetMapping(ID)
     public ResponseEntity<Garage> getGarage(@PathVariable Long id) {
         return ResponseEntity
                 .ok()
                 .body(garageService.getGarageById(id));
     }
 
-    @DeleteMapping("/{id}")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    @DeleteMapping(ID)
     public ResponseEntity<Void> deleteGarage(@PathVariable Long id) {
         garageService.deleteGarageById(id);
         return ResponseEntity

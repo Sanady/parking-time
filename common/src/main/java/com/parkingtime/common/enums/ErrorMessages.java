@@ -15,6 +15,12 @@ public enum ErrorMessages {
     USER_NEW_PASSWORD_DOES_NOT_MATCH("User new password and confirmation password does not matches!"),
     USER_DOES_NOT_CONTAIN_SPECIFIC_ROLE("User does not contain specific role"),
     USER_ALREADY_EXISTS_IN_SYSTEM("User is already existing in system, please try again."),
+    GARAGE_NOT_FOUND("Garage not found"),
+    PARKING_SPOT_GREATER_THEN_ZERO("Total parking spots cannot be greater than garage total"),
+    PARKING_SPOT_ALREADY_CREATED("Parking spots already created"),
+    PARKING_SPOT_TOTAL_CANNOT_BE_NULL("Total parking spots cannot be null or zero"),
+    PARKING_SPOT_NOT_FOUND("Parking spot not found"),
+    PARKING_SPOT_CANNOT_BE_NULL("Parking spot id cannot be null"),
     VEHICLE_NOT_FOUND("Vehicle not found");
 
     private final String value;

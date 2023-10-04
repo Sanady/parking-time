@@ -9,7 +9,6 @@ import com.parkingtime.common.responses.CreateGarageResponse;
 import com.parkingtime.controllers.GarageController;
 import com.parkingtime.models.Garage;
 import com.parkingtime.models.GarageGeolocation;
-import com.parkingtime.repositories.GarageRepository;
 import com.parkingtime.services.GarageService;
 import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.Assertions;
@@ -20,18 +19,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.io.IOException;
-import java.util.Optional;
-
-import static org.assertj.core.api.BDDAssumptions.given;
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -42,9 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class GarageControllerTests {
     @Mock
     private GarageService garageService;
-
-    @Mock
-    private GarageRepository garageRepository;
 
     private MockMvc mockMvc;
 

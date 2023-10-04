@@ -15,6 +15,8 @@ public class ApplicationConstants {
     public static final String API = "/api";
     public static final String V1 = API + "/v1";
 
+    public static final String ID = "/{id}";
+
     public static final String AUTH = V1 + "/auth";
     public static final String REGISTRATION = "/registration";
     public static final String AUTHENTICATE = "/authenticate";
@@ -28,7 +30,13 @@ public class ApplicationConstants {
     public static final String CHANGE_USER_PASSWORD = GET_USER + "/change-password";
 
     public static final String VEHICLE = V1 + "/vehicle";
+    public static final String VEHICLE_BY_ID = "/{vehicleId}";
+    public static final String VEHICLE_BY_LICENCE_PLATE = "/licence-plate";
+    public static final String VEHICLE_BY_LICENCE_PLATE_PARAM = VEHICLE_BY_LICENCE_PLATE + "/{licencePlate}";
 
     public static final String GARAGE = V1 + "/garage";
+    public static final String GARAGE_BY_ID = "/{garageId}";
+
+    public static final String PARKING_SPOT = V1 + "/parking-spot";
 
 }
