@@ -54,7 +54,6 @@ public class ParkingSpotController {
                 .body(parkingSpotService.getParkingSpot(id));
     }
 
-    @PreAuthorize(value = "hasRole('ROLE_USER')")
     @PatchMapping(ID)
     public ResponseEntity<ParkingSpot> updateParkingSpot(@PathVariable Long id) {
         return ResponseEntity

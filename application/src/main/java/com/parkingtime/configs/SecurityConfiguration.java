@@ -11,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.parkingtime.common.constants.ApplicationConstants.ID;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,7 +26,8 @@ public class SecurityConfiguration {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers(ApplicationConstants.AUTH + "/**")
+                .requestMatchers(ApplicationConstants.AUTH + "/**",
+                        ApplicationConstants.PARKING_SPOT + ID)
                 .permitAll()
                 .anyRequest()
                 .authenticated()
