@@ -10,5 +10,7 @@ public record CreateVehicleResponse(
         @JsonProperty("licence_plate")
         String licencePlate,
         @JsonProperty("created_at")
-        LocalDateTime createdAt) {
+        LocalDateTime createdAt,
+        @JsonProperty("user_id")
+        Long userId) {
 }

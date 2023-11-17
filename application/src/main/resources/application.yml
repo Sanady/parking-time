@@ -1,6 +1,5 @@
 server:
   port: 8080
-
 spring:
   application:
     name: ParkingTime
@@ -10,6 +9,7 @@ spring:
     password: ivan3214
     driver-class-name: org.postgresql.Driver
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -30,3 +30,7 @@ spring:
           auth: true
           starttls:
             enable: true
+springdoc:
+  api-docs:
+    enabled: true
+  packagesToScan: "com.parkingtime"

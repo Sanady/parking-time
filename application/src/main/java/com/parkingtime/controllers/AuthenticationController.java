@@ -33,6 +33,7 @@ public class AuthenticationController {
     private final UserEmailVerificationService userEmailVerificationService;
     private final UserResetPasswordTokenService userResetPasswordTokenService;
 
+
     @PostMapping(REGISTRATION)
     public ResponseEntity<MessageResponse> register(
             @Validated @RequestBody RegisterRequest request) {

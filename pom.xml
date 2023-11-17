@@ -17,13 +17,16 @@
         <parent.parent.version>1.0-SNAPSHOT</parent.parent.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
-        <spring.boot.maven.plugin.version>3.0.4</spring.boot.maven.plugin.version>
-        <spring.boot.dependencies.version>3.0.4</spring.boot.dependencies.version>
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <spring.boot.maven.plugin.version>3.1.5</spring.boot.maven.plugin.version>
+        <spring.boot.dependencies.version>3.1.5</spring.boot.dependencies.version>
         <org.passay.version>1.6.3</org.passay.version>
         <io.jsonwebtoken.version>0.11.5</io.jsonwebtoken.version>
         <spring-cloud.version>2022.0.3</spring-cloud.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.2.0</springdoc-openapi-starter-webmvc-ui.version>
+        <swagger-annotations.version>2.2.18</swagger-annotations.version>
     </properties>
 
     <dependencyManagement>
@@ -71,8 +74,17 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <compilerArgs>
+                            <arg>-parameters</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>${maven-surefire-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

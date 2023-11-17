@@ -9,11 +9,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
 
 @Slf4j
 @EnableScheduling
+@EnableWebMvc
 @SpringBootApplication
 public class ParkingTimeApplication implements CommandLineRunner {
     @Autowired

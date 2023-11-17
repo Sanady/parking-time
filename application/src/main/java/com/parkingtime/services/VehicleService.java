@@ -1,5 +1,6 @@
 package com.parkingtime.services;
 
+import com.parkingtime.common.responses.CreateVehicleResponse;
 import com.parkingtime.models.User;
 import com.parkingtime.models.Vehicle;
 import com.parkingtime.repositories.UserRepository;
@@ -23,7 +24,7 @@ public class VehicleService {
     private final UserRepository userRepository;
     private final VehicleRepository vehicleRepository;
 
-    public Vehicle createVehicle(CreateVehicleRequest createVehicleRequest) {
+    public CreateVehicleResponse createVehicle(CreateVehicleRequest createVehicleRequest) {
         String vehicleType;
         User user = userRepository.findById(createVehicleRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -48,7 +49,15 @@ public class VehicleService {
                 .createdAt(LocalDateTime.now())
                 .vehicleType(vehicleType)
                 .build();
-        return vehicleRepository.save(vehicle);
+        vehicleRepository.save(vehicle);
+
+
+        return CreateVehicleResponse
+                .builder()
+                .userId(user.getId())
+                .licencePlate(vehicle.getLicencePlate())
+                .createdAt(vehicle.getCreatedAt())
+                .build();
     }
 
     public Vehicle getVehicle(Long vehicleId) {
